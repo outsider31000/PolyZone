@@ -204,8 +204,12 @@ local function _pointInPoly(point, poly)
     local minZ = poly.minZ
     local maxZ = poly.maxZ
     local z = point.z
-    if (minZ and z < minZ) or (maxZ and z > maxZ) then
-        return false
+    if minZ or maxZ then
+        local zMin = (minZ and maxZ) and math.min(minZ, maxZ) or minZ or maxZ
+        local zMax = (minZ and maxZ) and math.max(minZ, maxZ) or minZ or maxZ
+        if z < zMin or z > zMax then
+            return false
+        end
     end
 
     -- Returns true if the grid cell associated with the point is entirely inside the poly
